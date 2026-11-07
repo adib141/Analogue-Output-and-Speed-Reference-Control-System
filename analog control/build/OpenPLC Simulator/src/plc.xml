@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
+  <fileHeader companyName="Unknown" productName="Unnamed" productVersion="1" creationDateTime="2026-11-02T11:48:15"/>
+  <contentHeader name="Unnamed" modificationDateTime="2026-11-02T11:48:15">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="16" y="16"/>
+      </fbd>
+      <ld>
+        <scaling x="16" y="16"/>
+      </ld>
+      <sfc>
+        <scaling x="16" y="16"/>
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes/>
+    <pous>
+      <pou name="main" pouType="program">
+        <interface>
+          <localVars>
+            <variable name="Speed_Setpoint">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="Analog_Output">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="start">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="stop">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="system_run">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+            <variable name="emergency_stop">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[if stop OR emergency_stop then
+    system_run:= false;
+elsif start then
+    system_run:= true;
+end_if
+if emergency_stop AND not system_run then
+    Analog_Output:= 0.0;
+    Speed_Setpoint:= 0.0;
+else
+    if Speed_Setpoint <=0.0 then
+        Analog_Output:= 0.0;
+    elsif Speed_Setpoint>= 100.0 then
+        Analog_Output:= 10.0;
+    else 
+        Analog_Output:= (Speed_Setpoint/ 100.0)* 10.0;
+    end_if;
+
+end_if]]></xhtml:p>
+          </ST>
+        </body>
+        <documentation>
+          <xhtml:p><![CDATA[ ]]></xhtml:p>
+        </documentation>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations>
+      <configuration name="Config0">
+        <resource name="Res0">
+          <task name="task0" priority="1" interval="T#20ms">
+            <pouInstance name="instance0" typeName="main"/>
+          </task>
+        </resource>
+      </configuration>
+    </configurations>
+  </instances>
+</project>
